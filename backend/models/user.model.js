@@ -22,7 +22,7 @@ const userSchema =new mongoose.Schema({
                 type:Number,
                 default:1
             },
-            product:{
+            productId:{
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Product"
             }

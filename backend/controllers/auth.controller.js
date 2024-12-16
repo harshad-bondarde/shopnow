@@ -28,7 +28,7 @@ export const signup=async (req,res)=>{
                 role:user.role
             },
             token,
-            message:"user created successfully"
+            message:"User created successfully"
         })
     } catch (error) {
         console.log(error)
@@ -55,7 +55,8 @@ export const login=async (req,res)=>{
                     email:user.email,
                     role:user.role
                 },
-                token
+                token,
+                message:"Logged in successfully"
             })
         
     } catch (error) {

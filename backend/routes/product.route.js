@@ -1,6 +1,6 @@
 import exrpess from "express"
 import { adminMiddleware, userMiddleware } from "../middlewares/middleware.js"
-import { createProduct, deleteProduct, getAllProducts, getFeaturedProducts, getProductsByCategory, getRecommendedProducts } from "../controllers/product.controller.js"
+import { createProduct, deleteProduct, getAllProducts, getFeaturedProducts, getProductsByCategory, getRecommendedProducts, toggleProductFeature } from "../controllers/product.controller.js"
 const router=exrpess.Router()
 
 router.get("/",userMiddleware,adminMiddleware,getAllProducts)

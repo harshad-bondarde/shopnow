@@ -30,7 +30,7 @@ const SignUp = () => {
     }
     try {
       setLoading(true)
-      const response=await axios.post(`${url}/api/auth/signup`,formData)
+      const response=await axios.post(`${url}/auth/signup`,formData)
       console.log(response.data)
       toast.success(response.data.message)
       localStorage.setItem("token",response.data.token)

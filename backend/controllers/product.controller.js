@@ -3,7 +3,7 @@ import cloudinary from "../lib/cloudinary.js"
 
 export const getAllProducts=async (req,res)=>{
     try {
-        const products=await products.find({})
+        const products=await Product.find({})
         return res.status(200).json({
             products
         })
@@ -28,7 +28,7 @@ export const getFeaturedProducts=async (req,res)=>{
 
 export const createProduct=async(req,res)=>{
     try {
-        const {name,description,price,image,category}=req.body
+        const {name,description,price,image,category}=req.body.newProduct
         let cloudinaryRes=null
         if(image){
             cloudinaryRes=await cloudinary.uploader.upload(image,{folder:"products"})
@@ -40,6 +40,8 @@ export const createProduct=async(req,res)=>{
             image:cloudinaryRes?.secure_url ? cloudinaryRes?.secure_url : "",
             category
         })
+        console.log(product)
+        // product.save()
         res.status(200).json({
             product
         })
@@ -69,7 +71,7 @@ export const deleteProduct=async(req,res)=>{
             }
         }
         await Product.findOneAndDelete(req.params.id)
-        res.json({
+        res.status(200).json({
             message:"product deleted successfully"
         })
     } catch (error) {
@@ -128,7 +130,9 @@ export const toggleProductFeature=async (req,res) =>{
         if(product){
             product.isFeatured=!product.isFeatured
             const updated=await product.save()
-            res.json({updated})
+            res.status(200).json({
+                isFeatured:updated.isFeatured
+            })
         }else{
             res.status(404).json({
                 message:"Product not found"
@@ -141,4 +145,4 @@ export const toggleProductFeature=async (req,res) =>{
         })
     }
 
-    }
+}

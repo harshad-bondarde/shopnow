@@ -9,7 +9,7 @@ const Navbar = () => {
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const authUser=useSelector(state=>state.user.authUser);
-  const isadmin=true;
+  const isadmin=authUser?.role=='admin';
   return (
     <header className='w-screen bg-gray-800 h-fit shadow-sm shadow-blue-300'>
       <div className='mx-10 items-center py-2'>
@@ -24,12 +24,18 @@ const Navbar = () => {
               <Link to={''} className='text-gray-300 hover:text-blue-400 transition duration-300'>
                 Home
               </Link>
-
+              {
+                authUser && isadmin && 
+                              <Link to={"/dashboard"} className='bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 
+						                              rounded-md flex items-center transition duration-300 ease-in-out mr-1'>
+                                    Dashboard
+                              </Link>
+              }
               {
                 authUser && (
                   <Link to={'/cart'} className='relative text-gray-300 hover:text-blue-400 transition duration-300' >
                     <ShoppingCart size={19}/>
-                      <div className='absolute -top-3 -left-3 bg-blue-500 rounded-full h-6 w-6 text-center bg-opacity-60'>
+                      <div className='absolute -top-3 -left-3 bg-blue-700 rounded-full h-6 w-6 text-center bg-opacity-85 '>
                           3
                       </div>
                   </Link>

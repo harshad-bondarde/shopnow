@@ -3,17 +3,20 @@ import User from "../models/user.model.js"
 
 export const userMiddleware=async (req,res,next)=>{
     const auth=req.headers.authorization
+    console.log(auth)
+    // console.log(req.headers)
     if(!auth){
-        console.log("not logged in")
+        // console.log("not logged in")
         return res.status(401).json({
             message:"unauthorised access..."
         })
     }
     const token=auth
+    console.log(auth)
     try{ 
         const decoded=jwt.verify(token,process.env.JWT_SECRET)
         if(decoded.userId){
-            const user=await User.findById(decoded.userId).select("-password")
+            const user=await User.findById(decoded.userId).select("-password").populate("cartItems.productId")
             if(!user){
                 return res.status(401).json({
                     message:"user not found"
@@ -34,7 +37,7 @@ export const userMiddleware=async (req,res,next)=>{
     }
 }
 
-export const adminMiddleware=async (req,res)=>{
+export const adminMiddleware=async (req,res,next)=>{
     if(req.user && req.user.role=='admin'){
         next()
     }else{

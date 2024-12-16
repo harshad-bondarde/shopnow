@@ -79,7 +79,8 @@ export const updateQuantity=async(req,res)=>{
 
 export const getCartProducts=async(req,res)=>{
     try {
-        const cartItems=req.user.cartItems.populate("productId")
+        const cartItems=req.user.cartItems
+        console.log(cartItems)
         return res.status(200).json({
             cartItems
         })

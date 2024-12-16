@@ -26,7 +26,7 @@ const Login = () => {
     }
     try {
       setLoading(true)
-      const response=await axios.post(`${url}/api/auth/login`,formData)
+      const response=await axios.post(`${url}/auth/login`,formData)
       console.log(response.data)
       dispatch(setAuthUser(response.data.user))
       toast.success(response.data.message)

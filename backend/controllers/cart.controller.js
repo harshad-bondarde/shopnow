@@ -9,7 +9,7 @@ export const addToCart=async(req,res)=>{
             existingItem.quantity+=1
         }else{
             user.cartItems.push({
-                _id:productId,
+                _id:productId, 
                 quantity:1
             })
         }

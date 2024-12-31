@@ -52,7 +52,7 @@ export const useAddToCart=()=>{
             console.log(response)
             if(response.status==200){
                 dispatch(setCart(response.data.cartItems))
-                getItems() // above function will set structure to {_id,quantity } to last product so get product info again call getCart function 
+                getItems()
                 toast.success("Product Added to Cart")
             }
         } catch (error) {

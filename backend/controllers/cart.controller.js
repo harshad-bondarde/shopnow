@@ -1,13 +1,15 @@
+import Product from "../models/product.model.js";
 export const addToCart=async(req,res)=>{
     try {
         const { productId }=req.body
+        console.log(productId)
         const user=req.user;
-        const existingItem=user.cartItems.find(item=>item.productId==productId)
+        const existingItem=user.cartItems.find(item=>item._id==productId)
         if(existingItem){
             existingItem.quantity+=1
         }else{
             user.cartItems.push({
-                productId:productId,
+                _id:productId,
                 quantity:1
             })
         }
@@ -26,15 +28,16 @@ export const addToCart=async(req,res)=>{
 export const removeAllFromCart=async(req,res)=>{
     try {
         const { productId }=req.body;
-        const user=req.body;
+        const user=req.user;
         if(!productId){
-            user.cartItems=[]
+            console.log("no ID")
+            // user.cartItems=[]
         }else{
-            user.cartItems=user.cartItems.filter(item=>item.productId!=productId)
+            user.cartItems=user.cartItems.filter(item=>item._id!=productId)
         }
         await user.save()
         res.status(200).json({
-            cartItems:user.cartItems
+            message:"item deleted"
         })
     } catch (error) {
         console.log("error while removing product"+error.message)
@@ -49,15 +52,17 @@ export const updateQuantity=async(req,res)=>{
         const {id:productId}=req.params
         const { quantity }=req.body
         const user=req.user
-        const existingItem=user.cartItems.find(item=>item.productId==productId)
+        console.log(user)
+        const existingItem=user.cartItems.find(item=>item._id==productId)
+        // console.log(existingItem)
         if(existingItem){
-            if(quantity==0){
-                user.cartItems=user.cartItems.filter(item=>item,productId!=productId)
-                await user.save()
-                return res.status(200).json({
-                    cartItems:user.cartItems
-                })
-            }
+            // if(quantity==0){
+            //     user.cartItems=user.cartItems.filter(item=>item,productId!=productId)
+            //     await user.save()
+            //     return res.status(200).json({
+            //         cartItems:user.cartItems
+            //     })
+            // }
             existingItem.quantity=quantity;
             await user.save()
             return res.status(200).json({
@@ -79,8 +84,16 @@ export const updateQuantity=async(req,res)=>{
 
 export const getCartProducts=async(req,res)=>{
     try {
-        const cartItems=req.user.cartItems
-        console.log(cartItems)
+        const OurCartItems=req.user.cartItems
+        
+        const cartItems=await Promise.all (
+                OurCartItems.map(async(product)=>{
+                    const thisProduct=await Product.findById(product._id)
+                    if(thisProduct)
+                        return {...thisProduct.toJSON(),quantity:product.quantity}
+            })
+        )
+
         return res.status(200).json({
             cartItems
         })

@@ -3,12 +3,16 @@ import {ShoppingCart , LogIn , LogOut , Lock } from "lucide-react"
 import { Link } from 'react-router-dom'
 import { useSelector , useDispatch } from 'react-redux'
 import { setAuthUser } from '../store/userSlice'
+import { setCart } from '../store/cartSlice'
+import { setAllproducts } from '../store/productsSlice'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const authUser=useSelector(state=>state.user.authUser);
+  const {cartItems}=useSelector(state=>state.cart)
+
   const isadmin=authUser?.role=='admin';
   return (
     <header className='w-screen bg-gray-800 h-fit shadow-sm shadow-blue-300'>
@@ -36,7 +40,7 @@ const Navbar = () => {
                   <Link to={'/cart'} className='relative text-gray-300 hover:text-blue-400 transition duration-300' >
                     <ShoppingCart size={19}/>
                       <div className='absolute -top-3 -left-3 bg-blue-700 rounded-full h-6 w-6 text-center bg-opacity-85 '>
-                          3
+                          {cartItems.length}
                       </div>
                   </Link>
                 )
@@ -46,6 +50,8 @@ const Navbar = () => {
                 authUser ? 
                       <div className='cursor-pointer' onClick={()=>{
                                                          dispatch(setAuthUser(null))
+                                                         dispatch(setCart([]))
+                                                         dispatch(setAllproducts([]))
                                                          localStorage.removeItem('token')
                                                          navigate('/login')
                                                       }}> 

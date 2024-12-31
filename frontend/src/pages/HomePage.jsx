@@ -1,4 +1,7 @@
+import { useSelector } from "react-redux"
 import CategoryItem from "../components/CategoryItem"
+import { useAddToCart, useGetCartItems } from "../hooks/CartHookes"
+import { useEffect } from "react"
 const categories=[
   { href:"/jeans",name:"Jeans",imageUrl:"/jeans.jpg"},
   { href:"/t-shirts",name:"T-shirts",imageUrl:"/tshirts.webp"},
@@ -9,6 +12,13 @@ const categories=[
   { href:"/bags",name:"Bags",imageUrl:"/bag.webp"},
 ]
 const HomePage = () => {
+  const {authUser}=useSelector(state=>state.user)
+  const getItems=useGetCartItems()
+  const addToCart=useAddToCart()
+  useEffect(()=>{
+    if(authUser)
+        getItems()
+  },[])
   return (
     <>
       <div className="min-h-screen text-white ">

@@ -14,7 +14,7 @@ const userSchema =new mongoose.Schema({
     password:{
         type:String,
         required:true,
-        minlenght:6
+        minlength:6
     },
     cartItems:[
         {
@@ -25,8 +25,8 @@ const userSchema =new mongoose.Schema({
             productId:{
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Product"
-            }
-        }
+            },
+        },
     ],
     role:{
         type:String,
@@ -35,7 +35,8 @@ const userSchema =new mongoose.Schema({
     }
 },{
     timestamps:true
-})
+},
+)
 
 
 const User=mongoose.model("User",userSchema)

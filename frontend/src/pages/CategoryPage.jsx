@@ -14,7 +14,6 @@ const CategoryPage = () => {
   useEffect(()=>{
     getCategoryProducts(category,setCategoryProducts)
   },[useGetProductsByCategory])
-  console.log(categoryProducts) 
 
   return (
     <div className='min-h-screen'> 

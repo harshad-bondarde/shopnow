@@ -22,7 +22,7 @@ function App() {
                   <Route path="/login" element={!authUser ? <Login/>: <Navigate to={'/'}/>}/>
                   <Route path='/dashboard' element={authUser && authUser.role=='admin' ? <AdminPage/> : <Navigate to={"/"}/>}/>
                   <Route path='/category/:category' element={<CategoryPage/>}/>
-                  <Route path='/cart' element={<CartPage/>}/>
+                  <Route path='/cart' element={authUser ? <CartPage/> : <Navigate to={"/login"}/>}/>
                 </Routes> 
             </BrowserRouter>
       </div>

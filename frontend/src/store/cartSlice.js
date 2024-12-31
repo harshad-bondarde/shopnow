@@ -9,11 +9,30 @@ const cartSlice=createSlice({
     },
     reducers:{
         setCart:(state,action)=>{
-            state.cart=action.payload
-        }
+            state.cartItems=action.payload
+        },
+        
+        setTotal:(state,action)=>{
+            state.total=action.payload
+        },
+        
+        setQuantity:(state,action)=>{
+            const {_id,quantity}=action.payload
+            state.cartItems=state.cartItems.map(item=>{
+                if(_id==item._id){
+                    return {
+                        ...item,
+                        quantity:quantity
+                    }
+                }else{
+                    return item
+                }
+            })
+        },  
+        
     }
 
 })
 
-export const { setCart }=cartSlice.actions
+export const { setCart , setTotal }=cartSlice.actions
 export default cartSlice.reducer

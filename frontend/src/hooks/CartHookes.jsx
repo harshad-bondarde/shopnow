@@ -2,12 +2,24 @@ import {url} from "../url/url"
 import axios from "axios"
 import {useDispatch , useSelector} from "react-redux"
 import toast from "react-hot-toast"
-import { setCart , setTotal } from "../store/cartSlice"
-import { useEffect } from "react"
+import { clearCart, setCart , setTotal  } from "../store/cartSlice"
+
+export const useGetTotal=()=>{
+    const dispatch=useDispatch()
+    const { cartItems }=useSelector(state=>state.cart)
+    const getTotal=async()=>{
+        let total=0;
+        cartItems.forEach(item => {
+            total+=item.price*item.quantity
+        });
+        console.log(total)
+        await dispatch(setTotal(total))
+    }
+    return getTotal
+}
 
 export const useGetCartItems=()=>{
     const dispatch=useDispatch()
-
     const getItems=async()=>{
         try {
             const response=await axios.get(`${url}/cart/`,{
@@ -15,15 +27,10 @@ export const useGetCartItems=()=>{
                     authorization:localStorage.getItem('token')
                 }
             })
-            console.log(response)
+            // console.log(response)
             if(response.status==200){
-                dispatch(setCart(response.data.cartItems))
-                let total=0;
-                const items=response.data.cartItems
-                items.forEach(element => {
-                    
-                });
-
+                await dispatch(setCart(response.data.cartItems))
+                
             }
         } catch (error) {
             console.log(error)
@@ -49,9 +56,9 @@ export const useAddToCart=()=>{
                     authorization:localStorage.getItem("token")
                 }
             })
-            console.log(response)
+            // console.log(response)
             if(response.status==200){
-                dispatch(setCart(response.data.cartItems))
+                await dispatch(setCart(response.data.cartItems))
                 getItems()
                 toast.success("Product Added to Cart")
             }
@@ -67,6 +74,7 @@ export const useAddToCart=()=>{
 export const useDeleteFromCart=()=>{
     const dispatch=useDispatch()
     const {cartItems}=useSelector(state=>state.cart)
+    const getTotal=useGetTotal()
     const deletethis=async(productId)=>{
         try {
             const response=await axios.post(`${url}/cart/delete`,{
@@ -76,12 +84,13 @@ export const useDeleteFromCart=()=>{
                     authorization:localStorage.getItem("token")
                 }
             })
-            console.log(response)
+            // console.log(response)
             if(response.status==200){
                 const newItems=cartItems.filter((item)=>{
                     return item._id!=productId
                 })
-                dispatch(setCart(newItems))
+                await dispatch(setCart(newItems))
+                getTotal()
                 toast.success("Item Deleted")
             }else{
                 toast.error("Error while deleting the Product")
@@ -98,12 +107,12 @@ export const useUpdateQuantity=()=>{
     const dispatch=useDispatch()
     const { cartItems }=useSelector(state=>state.cart)
     const deleteThis=useDeleteFromCart()
+    const getTotal=useGetTotal()
     const update=async (product_id,quantity)=>{
         if(quantity==0){
             deleteThis(product_id)
             return
         }
-
 
         try {
             const response=await axios.put(`${url}/cart/${product_id}`,{
@@ -125,7 +134,8 @@ export const useUpdateQuantity=()=>{
                         return item
                     }
                 })
-                dispatch(setCart(updatedItems))
+                await dispatch(setCart(updatedItems))
+                getTotal()
             }else{
                 console.log(response)
                 toast.error("Error while Updating Quantity")
@@ -138,4 +148,20 @@ export const useUpdateQuantity=()=>{
     }
 
     return update
+}
+
+export const useEmptyCart=()=>{
+    const dispatch=useDispatch()
+    const empty=async()=>{
+        try {
+            const response=await axios.post(`${url}/cart/empty`)
+            console.log(response)
+            dispatch(clearCart())
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    return empty
+
 }

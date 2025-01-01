@@ -24,6 +24,7 @@ export const useGetAllProducts = () => {
           dispatch(setAllproducts(response.data.products))
         }else{
           console.log(response)
+          toast.error("Error while getting your products")
         }
       } catch (error) {
         console.log(error)
@@ -73,7 +74,7 @@ export const useDeleteProduct=()=>{
           authorization:localStorage.getItem("token")
         }
       })
-      console.log(response)
+      // console.log(response)
       if(response.status==200){  
         const newProducts=products.filter(product=>product._id!=product_id)
         dispatch(setAllproducts(newProducts))
@@ -97,7 +98,7 @@ export const useGetProductsByCategory=()=>{
     try {
       dispatch(setProductLoader(true))
       const response=await axios.get(`${url}/products/category/${category}`);
-      console.log(response)
+      // console.log(response)
       setCategoryProducts(response.data.products)
     } catch (error) {
       console.log(error)

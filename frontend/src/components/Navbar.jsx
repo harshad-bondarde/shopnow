@@ -53,6 +53,7 @@ const Navbar = () => {
                                                          dispatch(setCart([]))
                                                          dispatch(setAllproducts([]))
                                                          localStorage.removeItem('token')
+                                                         localStorage.removeItem('authUser')
                                                          navigate('/login')
                                                       }}> 
                         <div className='bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 

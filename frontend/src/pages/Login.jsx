@@ -27,10 +27,16 @@ const Login = () => {
     try {
       setLoading(true)
       const response=await axios.post(`${url}/auth/login`,formData)
-      console.log(response.data)
-      dispatch(setAuthUser(response.data.user))
-      toast.success(response.data.message)
-      localStorage.setItem("token",response.data.token)
+      // console.log(response.data)
+      if(response.status==200){  
+        dispatch(setAuthUser(response.data.user))
+        toast.success(response.data.message)
+        localStorage.setItem("token",response.data.token)
+        localStorage.setItem("authUser",JSON.stringify(response.data.user))
+      }else{
+        console.log(response)
+        toast.error("Error while Logging In")
+      }
     } catch (error) {
       console.log(error)
       toast.error(error.response.data.message)

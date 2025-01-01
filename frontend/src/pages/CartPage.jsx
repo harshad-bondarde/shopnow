@@ -4,6 +4,8 @@ import { useSelector , useDispatch } from 'react-redux'
 import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import CartItem from '../components/CartItem'
+import RecommendedProducts from '../components/RecommendedProducts'
+import Summary from '../components/Summary'
 
 const CartPage = () => {
     const {cartItems}=useSelector(state=>state.cart)
@@ -27,10 +29,19 @@ const CartPage = () => {
                                 </div>
                         </>
                     :
-                        <div className='space-y-3 '>
-                            {cartItems.map((item,key)=><CartItem item={item} key={key}/>)}
+                        <div className='flex flex-col space-y-8'>
+                            <div className='flex justify-between'>
+                                <div className='space-y-3 '>
+                                    {cartItems.map((item,key)=><CartItem item={item} key={key}/>)}
+                                </div>
+                                <div className='m-14 w-fit'>
+                                    <Summary/>
+                                </div>
+                            </div>
+                            {
+                                cartItems.length>0 && (<RecommendedProducts/>)
+                            }
                         </div>
-                    
                 }
             </div>
         </div>

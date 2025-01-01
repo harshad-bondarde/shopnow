@@ -10,29 +10,30 @@ const cartSlice=createSlice({
     reducers:{
         setCart:(state,action)=>{
             state.cartItems=action.payload
+            let total=0;
+            state.cartItems.forEach(item=>{
+                total+=item.price*item.quantity
+            })
+            state.total=total
         },
         
         setTotal:(state,action)=>{
             state.total=action.payload
-        },
-        
-        setQuantity:(state,action)=>{
-            const {_id,quantity}=action.payload
-            state.cartItems=state.cartItems.map(item=>{
-                if(_id==item._id){
-                    return {
-                        ...item,
-                        quantity:quantity
-                    }
-                }else{
-                    return item
-                }
+            let total=0;
+            state.cartItems.forEach(item=>{
+                total+=item.price*item.quantity
             })
-        },  
+            state.total=total
+        },
+
+        clearCart:(state,action)=>{
+            state.cartItems=[]
+            state.total=0;
+        }
         
     }
 
 })
 
-export const { setCart , setTotal }=cartSlice.actions
+export const { setCart , setTotal , clearCart }=cartSlice.actions
 export default cartSlice.reducer

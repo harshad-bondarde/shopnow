@@ -10,7 +10,7 @@ const router=express.Router()
 router.post("/createCheckoutSession",userMiddleware,async(req,res)=>{
     try {
         const { products }=req.body
-        if(!products || products.lenght==0)
+        if(!products || products.length==0)
             return res.status(400).json({ error:"invalid product format" })
         
         let totalAmount=0;
@@ -32,11 +32,11 @@ router.post("/createCheckoutSession",userMiddleware,async(req,res)=>{
         })
 
         const stripe= new Stripe(process.env.STRIPE_SECRET_KEY)
-        const session=await stripe.checkout.session.create({
+        const session=await stripe.checkout.sessions.create({
             payment_method_types:["card"],
             line_items:lineItems,
             mode:"payment",
-            success_url:`${process.env.CLIENT_URL}/success`,
+            success_url:`${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url:`${process.env.CLIENT_URL}/cancel`,
             metadata:{
                 userId:req.user._id.toString(), //metadata stored in form of string 
@@ -55,12 +55,13 @@ router.post("/createCheckoutSession",userMiddleware,async(req,res)=>{
             totalAmount:totalAmount/100
         })
     } catch (error) {
-        console.log("error in payment checkout ",error.message)
+        console.log(error)
         return res.status(500).json({
             error:error.message
         })
     }
 })
+
 
 export const checkoutSuccess=async (req,res)=>{
     try {

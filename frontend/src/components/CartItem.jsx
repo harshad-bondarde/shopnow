@@ -1,26 +1,37 @@
-import React from 'react'
-import { Trash , Minus , Plus } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Trash , Minus , Plus, Loader } from 'lucide-react'
 import { useDeleteFromCart, useUpdateQuantity } from '../hooks/CartHookes'
 
 
 const CartItem = ({item}) => {
   const deleteProduct=useDeleteFromCart()
   const updateQuantity=useUpdateQuantity()
+  const [loader,setLoader]=useState(true)
+  useEffect(()=>{
+    if(item.image==null)  setLoader(true)
+    else  setLoader(false)
+  },[item.image])
   return (
-    <div className='rounded-lg  border shadow-sm border-gray-700 bg-gray-800 p-6 '>
-      <div className='flex justify-between items-center'>
+    <div className='rounded-lg  border shadow-sm border-gray-700 bg-gray-800 p-6 w-full'>
+      <div className='flex justify-between gap-96 items-center'>
           
           <div className='flex'>  
-            <img className=' h-24 w-24 rounded object-cover' src={item.image}/>
+            { !loader ?
+                <img className=' h-34 w-24 rounded object-cover' src={item?.image} alt='Loading...'/>
+              :
+                <div className='flex flex-col justify-center text-blue-400'>
+                  <Loader className='animate-spin'/>
+                </div>
+            }
             <div className='flex flex-col justify-center gap-3 ml-4'>
                 <div className=' font-bold text-lg'>
-                  {item.name}
+                  {item.name?.charAt(0).toUpperCase()}{item.name?.slice(1)}
                 </div>
                 <div className='text-slate-400'>
-                  {item.description}
+                  {item?.description}
                 </div>
                 <button className='text-red-500'
-                  onClick={()=>deleteProduct(item._id)}
+                  onClick={()=>deleteProduct(item?._id)}
                   >
                   <Trash size={18}/>
                 </button>

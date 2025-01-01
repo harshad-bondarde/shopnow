@@ -105,4 +105,16 @@ export const getCartProducts=async(req,res)=>{
     }
 }
 
-
+export const emptyCart=async(req,res)=>{
+    const user=req.user;
+    if(!user){
+        return res.status(401).json({
+            message:"user not found..."
+        })
+    }
+    user.cartItems=[]
+    user.save()
+    return res.status(200).json({
+        message:"items deleted"
+    })
+}

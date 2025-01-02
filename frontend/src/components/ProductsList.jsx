@@ -53,14 +53,8 @@ const ProductsList = () => {
               </th>
             </tr>
           </thead>
-          {
-            productLoader ?
-                
-                  <>
-                    <Loader className='animate-spin'/>
-                  </>
-                :
-                  <tbody className='bg-gray-800 divide-y'>
+          
+                { !productLoader && <tbody className='bg-gray-800 divide-y'>
                     {products.map((product)=>(
                         <tr key={product._id}>
                             
@@ -111,9 +105,12 @@ const ProductsList = () => {
                         </tr>
                     ))}
                   </tbody>
+                }
 
-          }
       </table>
+      {productLoader && <div className='ml-56 mt-36'>
+                            <Loader className='animate-spin'/>   
+                        </div>}
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useGetCartItems } from '../hooks/CartHookes'
 import { useSelector , useDispatch } from 'react-redux'
 import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -13,7 +12,7 @@ const CartPage = () => {
     return (
         <div className='p-10'>
             <div className='flex flex-col space-y-3'>
-                { cartItems.length==0 ? 
+                { cartItems?.length==0 ? 
                         <>
                                 <div className='flex flex-col items-center justify-center space-y-4 py-16'
                 >

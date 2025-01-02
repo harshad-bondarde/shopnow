@@ -49,8 +49,9 @@ export const useGetCartItems=()=>{
 export const useAddToCart=()=>{
     const dispatch=useDispatch()
     const getItems=useGetCartItems()
-    const addToCart=async(product_id)=>{
+    const addToCart=async(product_id , setLoading)=>{
         try {
+            setLoading(true)
             const response=await axios.post(`${url}/cart/`,{productId:product_id},{
                 headers:{
                     authorization:localStorage.getItem("token")
@@ -65,6 +66,8 @@ export const useAddToCart=()=>{
         } catch (error) {
             console.log(error)
             toast.error("Error while adding in the cart")
+        }finally{
+            setLoading(false)
         }
 
     }

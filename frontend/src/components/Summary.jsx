@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { IndianRupee } from 'lucide-react'
+import { IndianRupee, Loader } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { loadStripe } from "@stripe/stripe-js"
 import { url } from '../url/url'
@@ -12,6 +12,7 @@ const stripePromise=loadStripe("pk_test_51QXgSbBxaf66OiPKxN3Bk9YAzARe2VWPhrVUmmz
 const Summary = () => {
     const {cartItems , total }=useSelector(state=>state.cart)
     const [quantity,setQuantity]=useState(0)
+    const [loading,setLoading]=useState(false)
     useEffect(()=>{
         let q=0;
         cartItems.forEach(item => {
@@ -23,21 +24,28 @@ const Summary = () => {
 
     const HandlePayment= async ()=>{
         const stripe=await stripePromise
-        const response=await axios.post(`${url}/payment/createCheckoutSession`,{
-            products:cartItems
-        },{
-            headers:{
-                authorization:localStorage.getItem('token')
-            }
-        })
-        const session=response.data
-        const result=await stripe.redirectToCheckout({
-            sessionId:session.id
-        })
-        console.log(response)
+        try { 
+                setLoading(true)
+                const response=await axios.post(`${url}/payment/createCheckoutSession`,{
+                    products:cartItems
+                },{
+                    headers:{
+                        authorization:localStorage.getItem('token')
+                    }
+                })
+                const session=response.data
+                const result=await stripe.redirectToCheckout({
+                    sessionId:session.id
+                })
+                console.log(response)
 
-        if(result.error){
+                if(result.error){
+                    console.log(error)
+                }
+        } catch (error) {
             console.log(error)
+        }finally{
+            setLoading(false)
         }
 
     }
@@ -66,7 +74,15 @@ const Summary = () => {
             </div>
         </div>
         <button onClick={()=>HandlePayment()} className='flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-base font-medium text-white hover:bg-blue-700'>
-            Proceed To Payment
+            {!loading ?    
+                    <div>    
+                        Proceed To Payment
+                    </div>
+                :
+                    <>
+                        <Loader className='animate-spin'/>
+                    </>
+            }
         </button>
         <div className='text-blue-500 underline text-center'>
             <Link to={"/"}>

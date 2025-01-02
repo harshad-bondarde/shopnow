@@ -109,3 +109,23 @@ export const useGetProductsByCategory=()=>{
   }
   return fetchProducts;
 }
+
+export const useGetFeaturedProducts=()=>{
+  const dispatch=useDispatch()
+  const getFeaturedProducts=async()=>{
+    try {
+      const response=await axios.get(`${url}/products/featured`)
+      console.log(response)
+      if(response.status==200){
+      
+        return response.data.featuredProducts
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Error while getting featured products ")
+      return []
+    } 
+ 
+  }
+  return getFeaturedProducts
+}

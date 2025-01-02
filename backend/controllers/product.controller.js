@@ -16,7 +16,7 @@ export const getAllProducts=async (req,res)=>{
     }
 }
 export const getFeaturedProducts=async (req,res)=>{
-    const featuredProducts=await Product.find({featured:true}).lean() //lean() sends plain js obj instead of mongodb document
+    const featuredProducts=await Product.find({isFeatured:true}) //lean() sends plain js obj instead of mongodb document
     if(!featuredProducts)
             return res.status(404).json({
                 messgae:"No featured products found"

@@ -39,7 +39,7 @@ router.post("/createCheckoutSession",userMiddleware,async(req,res)=>{
             success_url:`${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url:`${process.env.CLIENT_URL}/cancel`,
             metadata:{
-                userId:req.user._id.toString(), //metadata stored in form of string 
+                userId:JSON.stringify(req.user._id), //metadata stored in form of string 
                 products:JSON.stringify(
                             products.map((p)=>({
                                 id:p._id,
@@ -62,37 +62,43 @@ router.post("/createCheckoutSession",userMiddleware,async(req,res)=>{
     }
 })
 
+router.post("/checkoutSuccess",async (req,res)=>{
+        try {
+            const { sessionId }=req.body;
+            const stripe= new Stripe(process.env.STRIPE_SECRET_KEY)
+            const session=await stripe.checkout.sessions.retrieve(sessionId)
+            console.log(session.metadata)
+            let products;
+            try {
+                products = JSON.parse(session.metadata.products); 
+            } catch (error) {
+                throw new Error("Failed to parse products metadata: " + error.message);
+            }
+            const newOrder=new Order({
+                userId:JSON.parse(session.metadata.userId),
+                products:products.map((product)=>({
+                    productId:product.id,
+                    quantity:product.quantity,
+                    price:product.price
+                })),
+                totalAmount:session.amount_total/100,
+                stripeSessionId:sessionId
+            })
 
-export const checkoutSuccess=async (req,res)=>{
-    try {
-        const { sessionId }=req.body;
-        const stripe= new Stripe(process.env.STRIPE_SECRET_KEY)
-        const session=await stripe.checkout.sessions.retrieve(sessionId)
-
-        const products=JSON.parse(session.metadata.products)
-        const newOrder=new Order({
-            user:session.metadata.userId,
-            products:products.map((product)=>({
-                product:product.id,
-                quantity:product.quantity,
-                price:product.price
-            })),
-            totalAmount:session.amount_total/100,
-            stripeSessionId:sessionId
-        })
-
-        await newOrder.save()
-        res.status(200).json({
-            success:true,
-            message:"Payment Successful Order created",
-            orderId:newOrder._id
-        })
-    } catch (error) {
-        console.log("error while checkout success",error.message)
-        return res.status(500).json({
-            error:error.message
-        })
+            await newOrder.save()
+            res.status(200).json({
+                success:true,
+                message:"Payment Successful Order created",
+                orderId:newOrder._id
+            })
+        } catch (error) {
+            console.log(error)
+            // console.log("error while checkout success",error.message)
+            return res.status(500).json({
+                error:error.message
+            })
+        }
     }
-}
+)
 
 export default router

@@ -1,4 +1,6 @@
 import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
+
 export const addToCart=async(req,res)=>{
     try {
         const { productId }=req.body
@@ -106,14 +108,15 @@ export const getCartProducts=async(req,res)=>{
 }
 
 export const emptyCart=async(req,res)=>{
-    const user=req.user;
+    const user=await User.findById(req.user._id);
     if(!user){
         return res.status(401).json({
             message:"user not found..."
         })
     }
+    console.log(user)
     user.cartItems=[]
-    user.save()
+    await user.save({ validateBeforeSave: false, optimisticConcurrency: false });
     return res.status(200).json({
         message:"items deleted"
     })

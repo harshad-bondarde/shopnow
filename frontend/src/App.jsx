@@ -19,15 +19,15 @@ function App() {
   const authUser=useSelector(state=>state.user.authUser)
   const getItems=useGetCartItems()
   const dispatch=useDispatch()
-  useEffect(()=>{
-    if(!authUser){
-      const user=JSON.parse(localStorage.getItem("authUser"))
-      if(user){
-        dispatch(setAuthUser(user))
-        getItems()
-      }
-    }
-  },[authUser])
+  // useEffect(()=>{
+  //   if(!authUser){
+  //     const user=JSON.parse(localStorage.getItem("authUser"))
+  //     if(user){
+  //       dispatch(setAuthUser(user))
+  //       getItems()
+  //     }
+  //   }
+  // },[authUser])
   return (
     <>
       

@@ -154,7 +154,11 @@ export const useEmptyCart=()=>{
     const dispatch=useDispatch()
     const empty=async()=>{
         try {
-            const response=await axios.post(`${url}/cart/empty`)
+            const response=await axios.post(`${url}/cart/empty`,{},{
+                headers:{
+                    authorization:localStorage.getItem('token')
+                }
+            })
             console.log(response)
             dispatch(clearCart())
         } catch (error) {

@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import CategoryItem from "../components/CategoryItem"
 import { useAddToCart, useGetCartItems } from "../hooks/CartHookes"
 import { useEffect } from "react"
+import FeaturedProducts from "../components/FeaturedProducts"
 const categories=[
   { href:"/jeans",name:"Jeans",imageUrl:"/jeans.jpg"},
   { href:"/t-shirts",name:"T-shirts",imageUrl:"/tshirts.webp"},
@@ -14,7 +15,6 @@ const categories=[
 const HomePage = () => {
   const {authUser}=useSelector(state=>state.user)
   const getItems=useGetCartItems()
-  const addToCart=useAddToCart()
   useEffect(()=>{
     if(authUser)
         getItems()
@@ -31,6 +31,9 @@ const HomePage = () => {
           </div>
           <div className="grid grid-cols-3 gap-4 m-20">
             {categories.map((category,key)=>(<CategoryItem key={key} category={category}/>))}
+          </div>
+          <div>
+            <FeaturedProducts/>
           </div>
         </div>
       </div>

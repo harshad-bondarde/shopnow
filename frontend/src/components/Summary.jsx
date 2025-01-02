@@ -6,14 +6,12 @@ import { loadStripe } from "@stripe/stripe-js"
 import { url } from '../url/url'
 import axios from 'axios'
 import { clearCart } from '../store/cartSlice'
-import { useEmptyCart } from '../hooks/CartHookes'
 
 const stripePromise=loadStripe("pk_test_51QXgSbBxaf66OiPKxN3Bk9YAzARe2VWPhrVUmmzm8FzA7YheP4Pwf5cOn6wrs7AT15eYiGkTL1BDHYlPnH9VLHvj00HmAV40lD")
 
 const Summary = () => {
     const {cartItems , total }=useSelector(state=>state.cart)
     const [quantity,setQuantity]=useState(0)
-    const emptyCart=useEmptyCart()
     useEffect(()=>{
         let q=0;
         cartItems.forEach(item => {

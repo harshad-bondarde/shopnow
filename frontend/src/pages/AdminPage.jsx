@@ -1,11 +1,13 @@
-import { PlusCircle, ShoppingBasket } from 'lucide-react'
+import { PlusCircle, ShoppingBasket ,BriefcaseBusiness} from 'lucide-react'
 import React, { useState } from 'react'
 import CreateProductsForm from '../components/CreateProductsForm'
 import ProductsList from '../components/ProductsList'
+import AdminOrderList from '../components/AdminOrderLIst'
 
 const Tabs=[
     { id:'create',name:"Create-Product" , icon: PlusCircle},
-    { id:'products' , name:'Products' , icon:ShoppingBasket}
+    { id:'products' , name:'Products' , icon:ShoppingBasket},
+    { id:'orders' , name:'Orders' , icon:BriefcaseBusiness},
 ]
 const AdminPage = () => {
     const [activeTab,setActiveTab]=useState('create')
@@ -29,6 +31,7 @@ const AdminPage = () => {
             <div>
                 {activeTab=='create' && <CreateProductsForm/>}
                 {activeTab=='products' && <ProductsList/>}
+                {activeTab=='orders' && <AdminOrderList/>}
             </div>
         </div>
     </div>

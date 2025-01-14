@@ -16,14 +16,21 @@ export const getAllProducts=async (req,res)=>{
     }
 }
 export const getFeaturedProducts=async (req,res)=>{
-    const featuredProducts=await Product.find({isFeatured:true}) //lean() sends plain js obj instead of mongodb document
-    if(!featuredProducts)
-            return res.status(404).json({
-                messgae:"No featured products found"
-            })
-    return res.status(200).json({
-        featuredProducts
-    })
+    try {
+        const featuredProducts=await Product.find({isFeatured:true}) //lean() sends plain js obj instead of mongodb document
+        if(!featuredProducts)
+                return res.status(404).json({
+                    messgae:"No featured products found"
+                })
+        return res.status(200).json({
+            featuredProducts
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message:"internal server error"
+        })
+    }
 }
 
 export const createProduct=async(req,res)=>{

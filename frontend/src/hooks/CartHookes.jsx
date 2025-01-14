@@ -1,7 +1,7 @@
 import {url} from "../url/url"
 import axios from "axios"
-import {useDispatch , useSelector} from "react-redux"
 import toast from "react-hot-toast"
+import {useDispatch , useSelector} from "react-redux"
 import { clearCart, setCart , setTotal  } from "../store/cartSlice"
 
 export const useGetTotal=()=>{

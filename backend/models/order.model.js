@@ -35,8 +35,10 @@ const orderSchema=new mongoose.Schema({
     },
     pending:{
         type:Boolean,
-        default:false
+        default:true
     }
+},{
+    timestamps:true
 })
 
 const Order=mongoose.model("Order",orderSchema)

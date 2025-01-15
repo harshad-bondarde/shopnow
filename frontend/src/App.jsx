@@ -14,20 +14,12 @@ import { useDispatch } from "react-redux"
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage"
 import PurchaseCancelPage from "./pages/PurchaseCancelPage"
 import { useGetCartItems } from "./hooks/CartHookes"
+import OrderPage from "./pages/OrderPage"
 
 function App() {
   const authUser=useSelector(state=>state.user.authUser)
   const getItems=useGetCartItems()
   const dispatch=useDispatch()
-  // useEffect(()=>{
-  //   if(!authUser){
-  //     const user=JSON.parse(localStorage.getItem("authUser"))
-  //     if(user){
-  //       dispatch(setAuthUser(user))
-  //       getItems()
-  //     }
-  //   }
-  // },[authUser])
   return (
     <>
       
@@ -41,6 +33,7 @@ function App() {
                   <Route path='/dashboard' element={authUser && authUser.role=='admin' ? <AdminPage/> : <Navigate to={"/"}/>}/>
                   <Route path='/category/:category' element={<CategoryPage/>}/>
                   <Route path='/cart' element={authUser ? <CartPage/> : <Navigate to={"/login"}/>}/>
+                  <Route path='/orders' element={authUser ? <OrderPage/> : <Navigate to={"/orders"}/>}/>
                   <Route path='/success' element={authUser ? <PurchaseSuccessPage /> : <Navigate to='/login' />}/>
 					        <Route path='/cancel' element={authUser ? <PurchaseCancelPage /> : <Navigate to='/login' />} />
                 </Routes> 

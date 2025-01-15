@@ -1,5 +1,5 @@
 import React from 'react'
-import {ShoppingCart , LogIn , LogOut , Lock } from "lucide-react"
+import {ShoppingCart , LogIn , LogOut , Lock, BriefcaseBusiness } from "lucide-react"
 import { Link } from 'react-router-dom'
 import { useSelector , useDispatch } from 'react-redux'
 import { setAuthUser } from '../store/userSlice'
@@ -23,7 +23,7 @@ const Navbar = () => {
             Shopify
           </Link>
 
-          <nav className='flex items-center gap-4'>
+          <nav className='flex items-center gap-5'>
               
               <Link to={''} className='text-gray-300 hover:text-blue-400 transition duration-300'>
                 Home
@@ -42,6 +42,15 @@ const Navbar = () => {
                       <div className='absolute -top-3 -left-3 bg-blue-700 rounded-full h-6 w-6 text-center bg-opacity-85 '>
                           {cartItems.length}
                       </div>
+                  </Link>
+                )
+              }
+
+              {
+                authUser && (
+                  <Link to='/orders' className='flex  items-center gap-1 text-gray-300 hover:text-blue-400 transition duration-300' >
+                    <BriefcaseBusiness size={17} className=''/>
+                      Orders
                   </Link>
                 )
               }
